@@ -18,4 +18,5 @@ permissions:
   id-token: write
 
 concurrency:
-  group
+  group: github-pages
+  cancel
