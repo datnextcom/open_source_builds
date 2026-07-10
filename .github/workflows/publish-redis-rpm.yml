@@ -1,25 +1,14 @@
 name: Publish Redis RPM
-
-on:
-  workflow_dispatch:
-
+on: workflow_dispatch
 permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: github-pages
-  cancel-in-progress: false
-
+  contents: write
 jobs:
-  build:
+  p:
     runs-on: ubuntu-latest
     steps:
-      - name: Download RPM
-        env:
+      - env:
           GH_TOKEN: ${{ secrets.REDIS_RELEASE_TOKEN }}
-        run: |
-          set -euo pipefail
-          mkdir -p site
-          gh release download redis-8.8.
+        run: gh release download redis-8.8.0-el10 -R techhead-datnextcom/api_server_ws_resources -p '*.rpm'
+      - env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create redis-8.8.0-el10 *.rpm -
