@@ -16,7 +16,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Download private RPM
+      - name: Download RPM
         env:
           GH_TOKEN: ${{ secrets.REDIS_RELEASE_TOKEN }}
-        shell
+        run: |
+          set -euo pipefail
+          mkdir -p site
+          gh release download redis-8.8.
