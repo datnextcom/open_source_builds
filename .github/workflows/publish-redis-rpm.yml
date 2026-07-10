@@ -1,13 +1,17 @@
 name: Publish Redis RPM
 on: workflow_dispatch
 permissions:
-  contents: write
+  contents: read
+  pages: write
+  id-token: write
 jobs:
   publish:
     runs-on: ubuntu-latest
+    environment: github-pages
     steps:
-      - env:
+      - name: Download
+        env:
           GH_TOKEN: ${{ secrets.REDIS_RELEASE_TOKEN }}
-        run: gh release download redis-8.8.0-el10 -R techhead-datnextcom/api_server_ws_resources -p '*.rpm'
-      - env:
-          GH_TOKEN: ${{ github.token }}
+        run: mkdir site && gh release download redis-8.8.0-el10 -R techhead-datnextcom/api_server_ws_resources -p '*.rpm' -D site
+      - name: Upload
+       
