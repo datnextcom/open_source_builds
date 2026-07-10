@@ -1,13 +1,17 @@
 name: Publish Redis RPM
+
 on:
   workflow_dispatch:
+
 permissions:
   contents: read
   pages: write
   id-token: write
+
 concurrency:
   group: github-pages
   cancel-in-progress: false
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -15,5 +19,4 @@ jobs:
       - name: Download private RPM
         env:
           GH_TOKEN: ${{ secrets.REDIS_RELEASE_TOKEN }}
-        run: |
-          set -e
+        shell
