@@ -35,9 +35,42 @@ jobs:
             --pattern "redis-8.8.0-1.el10.x86_64.rpm" \
             --dir site
 
+          test -f "site/redis-8.8.0-1.el10.x86_64.rpm"
+
           cd site
+
           sha256sum redis-8.8.0-1.el10.x86_64.rpm > SHA256SUMS
+
           touch .nojekyll
+
+          cat > index.html <<'EOF'
+          <!doctype html>
+          <html lang="en">
+          <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <title>Redis RPM Downloads</title>
+          </head>
+          <body>
+            <h1>Redis 8.8.0 for Enterprise Linux 10</h1>
+
+            <p>
+              <a href="redis-8.8.0-1.el10.x86_64.rpm">
+                Download redis-8.8.0-1.el10.x86_64.rpm
+              </a>
+            </p>
+
+            <p>
+              <a href="SHA256SUMS">
+                SHA-256 checksum
+              </a>
+            </p>
+          </body>
+          </html>
+          EOF
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v4
