@@ -1,8 +1,11 @@
 name: Publish Redis RPM
+
 on:
   workflow_dispatch:
+
 permissions:
   contents: write
+
 jobs:
   publish:
     runs-on: ubuntu-latest
@@ -11,5 +14,9 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.REDIS_RELEASE_TOKEN }}
         run: |
-          mkdir dist
-          gh release download redis-8.8.0-el10 --repo techhead-datnextcom/api_server_ws_resources --pattern 'redis-8
+          set -euo pipefail
+          mkdir -p dist
+          gh release download redis-8.8.0-el10 \
+            --repo techhead-datnextcom/api_server_ws_resources \
+            --pattern 'redis-8.8.0-1.el10.x86_64.rpm' \
+            --dir dist
