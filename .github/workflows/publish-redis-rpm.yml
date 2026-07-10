@@ -1,17 +1,21 @@
-name: Publish Redis RPM to GitHub Pages
-
-run-name: Publish ${{ inputs.asset_name }} from ${{ inputs.release_tag }}
+name: Publish Redis RPM
 
 on:
   workflow_dispatch:
     inputs:
       release_tag:
-        description: Release tag in the private source repository
+        description: Private release tag
         required: true
-        type: string
         default: redis-8.8.0-el10
       asset_name:
-        description: Exact RPM release asset filename
+        description: Exact RPM filename
         required: true
-        type: string
         default: redis-8.8.0-1.el10.x86_64.rpm
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group
