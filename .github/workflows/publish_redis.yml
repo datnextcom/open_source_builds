@@ -1,0 +1,49 @@
+name: Publish Redis RPM to GitHub Pages
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Download RPM from private release
+        env:
+          GH_TOKEN: ${{ secrets.REDIS_RELEASE_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          mkdir -p site
+
+          gh release download redis-8.8.0-el10 \
+            --repo techhead-datnextcom/api_server_ws_resources \
+            --pattern "redis-8.8.0-1.el10.x86_64.rpm" \
+            --dir site
+
+          cd site
+          sha256sum redis-8.8.0-1.el10.x86_64.rpm > SHA256SUMS
+          touch .nojekyll
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: site
+
+      - name: Deploy GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
